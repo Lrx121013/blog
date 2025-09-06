@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>铭记历史 珍爱和平 - 抗战胜利80周年纪念</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Serif SC', serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(to bottom, #fef7f7, #fff);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 头部样式 */
+        header {
+            background: linear-gradient(rgba(180, 0, 0, 0.9), rgba(150, 0, 0, 0.8)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23b30000" width="100" height="100"/><path fill="%23cc0000" d="M0 0h100v100H0z" opacity=".2"/></svg>');
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInDown 1.5s ease;
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            animation: fadeInUp 1.5s ease;
+        }
+        
+        /* 汉堡菜单样式 */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: #900;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .menu-toggle:hover {
+            background: #c00;
+            transform: scale(1.1);
+        }
+        
+        .menu-toggle span {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        nav {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100vh;
+            background: #900;
+            z-index: 900;
+            transition: all 0.4s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            overflow-y: auto;
+            padding-top: 80px;
+        }
+        
+        nav.active {
+            left: 0;
+        }
+        
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            display: block;
+            transition: all 0.3s ease;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item:hover {
+            background-color: #c00;
+            padding-left: 35px;
+        }
+        
+        .nav-item:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #ffde59;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover:after {
+            width: 100%;
+        }
+        
+        /* 主内容区样式 */
+        .main-content {
+            padding: 50px 0;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+        
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .section-title {
+            text-align: center;
+            color: #900;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, #900, #ffde59, #900);
+        }
+        
+        /* 时间轴样式 */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: #900;
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            width: 50%;
+            padding: 20px 40px;
+            position: relative;
+            animation: fadeIn 1s ease;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #900;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .timeline-year {
+            font-weight: bold;
+            color: #900;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        /* 英雄展示样式 */
+        .heroes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .hero-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .hero-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .hero-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-img {
+            height: 200px;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23900" width="100" height="100"/><path fill="%23cc0000" d="M0 0h100v100H0z" opacity=".2"/></svg>');
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .hero-content {
+            padding: 20px;
+        }
+        
+        .hero-name {
+            color: #900;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        /* 引用部分样式 */
+        .quote-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23333" width="100" height="100"/><path fill="%23444" d="M0 0h100v100H0z" opacity=".2"/></svg>');
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .quote {
+            font-size: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+            font-style: italic;
+            position: relative;
+            padding: 0 40px;
+        }
+        
+        .quote:before, .quote:after {
+            content: '"';
+            font-size: 4rem;
+            color: #ffde59;
+            position: absolute;
+            opacity: 0.7;
+        }
+        
+        .quote:before {
+            left: 0;
+            top: -20px;
+        }
+        
+        .quote:after {
+            right: 0;
+            bottom: -40px;
+        }
+        
+        /* 页脚样式 */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-size: 2.5rem;
+            color: #ffde59;
+            margin-bottom: 20px;
+        }
+        
+        /* 动画定义 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.4rem;
+            }
+            
+            .timeline:before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 20px;
+                left: 0 !important;
+            }
+            
+            .heroes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quote {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* 飘动的旗帜效果 */
+        .flag {
+            position: absolute;
+            top: 20px;
+            right: 5%;
+            width: 120px;
+            height: 80px;
+            background: #c00;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            animation: wave 3s infinite ease-in-out;
+            transform-origin: left center;
+        }
+        
+        .flag:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 20px;
+            background: #ffde59;
+        }
+        
+        .star {
+            position: absolute;
+            top: 50%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            color: #ffde59;
+            font-size: 24px;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(2deg); }
+        }
+        
+        /* 粒子背景效果 */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 222, 89, 0.8);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(-40px) translateX(-10px); }
+            75% { transform: translateY(-20px) translateX(-15px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 汉堡菜单按钮 -->
+    <div class="menu-toggle" id="menuToggle">
+        <span>☰</span>
+    </div>
+    
+    <!-- 导航菜单 -->
+    <nav id="mainNav">
+        <a href="#history" class="nav-item">历史回顾</a>
+        <a href="#heroes" class="nav-item">抗日英雄</a>
+        <a href="#timeline" class="nav-item">时间轴线</a>
+        <a href="#significance" class="nav-item">历史意义</a>
+        <a href="#memory" class="nav-item">永恒记忆</a>
+    </nav>
+    
+    <!-- 头部区域 -->
+    <header>
+        <div class="particles" id="particles"></div>
+        <div class="flag">
+            <div class="star">★</div>
+        </div>
+        <div class="container header-content">
+            <h1>中国人民抗日战争胜利80周年</h1>
+            <p class="subtitle">铭记历史 缅怀先烈 珍爱和平 开创未来</p>
+        </div>
+    </header>
+    
+    <!-- 主内容区 -->
+    <main class="container main-content">
+        <!-- 历史回顾 -->
+        <section id="history" class="section">
+            <h2 class="section-title">历史回顾</h2>
+            <p>中国人民抗日战争，是中华民族历史上最伟大的卫国战争，是中国人民反抗日本帝国主义侵略的正义战争，是世界反法西斯战争的重要组成部分，也是中国近代以来抗击外敌入侵第一次取得完全胜利的民族解放战争。</p>
+            <p>抗日战争从1931年9月18日九一八事变开始，至1945年9月2日结束，共历时14年。中国人民付出了巨大的民族牺牲，军民伤亡超过3500万人，经济损失达6000亿美元。</p>
+            <p>在这场艰苦卓绝的战争中，中国人民表现出巨大的民族觉醒和空前的民族团结，在中国共产党倡导建立的抗日民族统一战线旗帜下，全国各族人民万众一心、共赴国难，与日本侵略者进行了气壮山河的斗争。</p>
+        </section>
+        
+        <!-- 时间轴线 -->
+        <section id="timeline" class="section">
+            <h2 class="section-title">抗战时间轴线</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1931年</div>
+                        <p>九一八事变爆发，日本侵占中国东北，中国人民局部抗战开始。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1937年</div>
+                        <p>七七事变爆发，日本发动全面侵华战争，中国全民族抗战开始。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1937年</div>
+                        <p>淞沪会战爆发，粉碎日本"三个月灭亡中国"的狂妄计划。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1938年</div>
+                        <p>台儿庄大捷，中国军队取得重大胜利，鼓舞全国抗战士气。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1940年</div>
+                        <p>百团大战，八路军在华北地区发动大规模进攻战役。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">1945年</div>
+                        <p>8月15日，日本宣布无条件投降；9月2日，日本正式签署投降书。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 抗日英雄 -->
+        <section id="heroes" class="section">
+            <h2 class="section-title">抗日英雄</h2>
+            <div class="heroes-grid">
+                <div class="hero-card">
+                    <div class="hero-img">左权</div>
+                    <div class="hero-content">
+                        <h3 class="hero-name">左权将军</h3>
+                        <p>八路军副参谋长，1942年在山西辽县（今左权县）指挥反"扫荡"作战中壮烈殉国，是八路军在抗日战场上牺牲的最高指挥员。</p>
+                    </div>
+                </div>
+                <div class="hero-card">
+                    <div class="hero-img">张自忠</div>
+                    <div class="hero-content">
+                        <h3 class="hero-name">张自忠将军</h3>
+                        <p>第五战区右翼集团军兼第三十三集团军总司令，1940年在襄阳与日军战斗中不幸牺牲，是二战中盟军牺牲的最高级别将领。</p>
+                    </div>
+                </div>
+                <div class="hero-card">
+                    <div class="hero-img">杨靖宇</div>
+                    <div class="hero-content">
+                        <h3 class="hero-name">杨靖宇将军</h3>
+                        <p>东北抗日联军的主要创建者和领导人之一，1940年在濛江县（今靖宇县）与日军战斗中壮烈牺牲，年仅35岁。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 历史意义 -->
+        <section id="significance" class="section">
+            <h2 class="section-title">历史意义</h2>
+            <p>中国人民抗日战争的伟大胜利，彻底粉碎了日本军国主义殖民奴役中国的图谋，洗刷了近代以来中国抗击外来侵略屡战屡败的民族耻辱。</p>
+            <p>这一伟大胜利，重新确立了中国在世界上的大国地位，使中国人民赢得了世界爱好和平人民的尊敬。</p>
+            <p>这一伟大胜利，开辟了中华民族伟大复兴的光明前景，开启了古老中国凤凰涅槃、浴火重生的新征程。</p>
+        </section>
+        
+        <!-- 永恒记忆 -->
+        <section id="memory" class="section">
+            <h2 class="section-title">永恒记忆</h2>
+            <p>历史是最好的教科书，也是最好的清醒剂。中国人民对战争带来的苦难有着刻骨铭心的记忆，对和平有着孜孜不倦的追求。</p>
+            <p>我们要铭记历史、缅怀先烈、珍爱和平、开创未来，坚定不移走和平发展道路，坚定不移维护世界和平。</p>
+        </section>
+    </main>
+    
+    <!-- 引用部分 -->
+    <section class="quote-section">
+        <div class="container">
+            <p class="quote">中国人民抗日战争胜利，是近代以来中国抗击外敌入侵的第一次完全胜利。这一伟大胜利，彻底粉碎了日本军国主义殖民奴役中国的图谋，洗刷了近代以来中国抗击外来侵略屡战屡败的民族耻辱。</p>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">和平 • 发展 • 铭记</div>
+            <p>纪念中国人民抗日战争暨世界反法西斯战争胜利80周年</p>
+            <p>© 2025 中国人民抗日战争胜利80周年纪念网</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建粒子效果
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // 随机大小和位置
+                const size = Math.random() * 5 + 2;
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const delay = Math.random() * 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.top = `${top}%`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // 滚动动画效果
+        function checkScroll() {
+            const sections = document.querySelectorAll('.section');
+            const heroCards = document.querySelectorAll('.hero-card');
+            
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (sectionTop < windowHeight * 0.85) {
+                    section.classList.add('visible');
+                }
+            });
+            
+            heroCards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (cardTop < windowHeight * 0.85) {
+                    card.classList.add('visible');
+                }
+            });
+        }
+        
+        // 菜单切换功能
+        function setupMenu() {
+            const menuToggle = document.getElementById('menuToggle');
+            const mainNav = document.getElementById('mainNav');
+            
+            menuToggle.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+            });
+            
+            // 点击菜单项后关闭菜单
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    mainNav.classList.remove('active');
+                });
+            });
+            
+            // 点击页面其他区域关闭菜单
+            document.addEventListener('click', function(e) {
+                if (!mainNav.contains(e.target) && e.target !== menuToggle) {
+                    mainNav.classList.remove('active');
+                }
+            });
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            checkScroll();
+            setupMenu();
+            
+            // 监听滚动事件
+            window.addEventListener('scroll', checkScroll);
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 70,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
