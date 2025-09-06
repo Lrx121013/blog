@@ -1,573 +1,209 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人博客</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <title>鼠标粒子特效</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: #333;
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* 导航栏样式 */
-        header {
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-        
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #4a6cf7;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            transition: transform 0.3s ease;
-        }
-        
-        .logo:hover {
-            transform: scale(1.05);
-        }
-        
-        .logo i {
-            margin-right: 8px;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 30px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-        
-        .nav-links a:hover {
-            color: #4a6cf7;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: #4a6cf7;
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        /* 汉堡菜单 */
-        .hamburger {
-            display: none;
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: #4a6cf7;
-        }
-        
-        /* 英雄区域 */
-        .hero {
-            padding: 150px 0 100px;
-            text-align: center;
-            animation: fadeIn 1s ease-out;
-        }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            color: #222;
-            animation: slideUp 1s ease-out;
-        }
-        
-        .hero p {
-            font-size: 1.3rem;
-            max-width: 700px;
-            margin: 0 auto 30px;
-            color: #555;
-            animation: slideUp 1.2s ease-out;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 14px 30px;
-            background: #4a6cf7;
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            animation: fadeIn 1.5s ease-out;
-        }
-        
-        .btn:hover {
-            background: #3a57d7;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(58, 87, 215, 0.3);
-        }
-        
-        /* 博客内容区域 */
-        .blog-section {
-            padding: 80px 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 50px;
-            color: #222;
-            position: relative;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            width: 80px;
-            height: 4px;
-            background: #4a6cf7;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 2px;
-        }
-        
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
-        
-        .blog-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .blog-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-        
-        .card-img {
-            height: 200px;
-            overflow: hidden;
-        }
-        
-        .card-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .blog-card:hover .card-img img {
-            transform: scale(1.1);
-        }
-        
-        .card-content {
-            padding: 25px;
-        }
-        
-        .card-content h3 {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            color: #222;
-        }
-        
-        .card-content p {
-            color: #666;
-            margin-bottom: 20px;
-        }
-        
-        .read-more {
-            display: inline-block;
-            color: #4a6cf7;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        
-        .read-more:hover {
-            color: #3a57d7;
-        }
-        
-        /* 页脚 */
-        footer {
-            background: #222;
-            color: white;
-            padding: 60px 0 30px;
-            text-align: center;
-        }
-        
-        .footer-content {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .footer-content h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
-        
-        .footer-content p {
-            margin-bottom: 30px;
-            color: #ccc;
-        }
-        
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        
-        .social-icons a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            background: #333;
-            color: white;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .social-icons a:hover {
-            background: #4a6cf7;
-            transform: translateY(-5px);
-        }
-        
-        .copyright {
-            padding-top: 20px;
-            border-top: 1px solid #444;
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-        
-        /* 汉堡菜单内容 */
-        .mobile-menu {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 300px;
-            height: 100vh;
-            background: white;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-            z-index: 1001;
-            transition: right 0.4s ease;
-            padding: 80px 30px 30px;
-        }
-        
-        .mobile-menu.active {
-            right: 0;
-        }
-        
-        .close-menu {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #333;
-            cursor: pointer;
-        }
-        
-        .mobile-nav-links {
-            list-style: none;
-        }
-        
-        .mobile-nav-links li {
-            margin-bottom: 20px;
-        }
-        
-        .mobile-nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-size: 1.2rem;
-            font-weight: 500;
-            display: block;
-            padding: 10px 0;
-            transition: color 0.3s ease;
-        }
-        
-        .mobile-nav-links a:hover {
-            color: #4a6cf7;
-        }
-        
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-            z-index: 1000;
-        }
-        
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        /* 动画 */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* 响应式设计 */
-        @media (max-width: 992px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .hamburger {
-                display: block;
-            }
-            
-            .hero h1 {
-                font-size: 2.8rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .hero {
-                padding: 120px 0 80px;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .blog-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-        }
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        overflow: hidden;
+        display: grid;
+        color: white;
+        background: black;
+      }
     </style>
-</head>
-<body>
-    <!-- 导航栏 -->
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <a href="#" class="logo">
-                    <i class="fas fa-blog"></i>我的博客
-                </a>
-                
-                <ul class="nav-links">
-                    <li><a href="#">首页</a></li>
-                    <li><a href="#">文章</a></li>
-                    <li><a href="#">分类</a></li>
-                    <li><a href="#">关于我</a></li>
-                    <li><a href="#">联系</a></li>
-                </ul>
-                
-                <button class="hamburger" id="hamburger">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </nav>
-        </div>
-    </header>
-    
-    <!-- 移动菜单 -->
-    <div class="mobile-menu" id="mobile-menu">
-        <button class="close-menu" id="close-menu">
-            <i class="fas fa-times"></i>
-        </button>
-        
-        <ul class="mobile-nav-links">
-            <li><a href="#">首页</a></li>
-            <li><a href="#">文章</a></li>
-            <li><a href="#">分类</a></li>
-            <li><a href="#">关于我</a></li>
-            <li><a href="#">联系</a></li>
-            <li><a href="https://lrx.dpdns.org/kzsl80years" target="_blank">特别项目</a></li>
-        </ul>
-    </div>
-    
-    <div class="overlay" id="overlay"></div>
-    
-    <!-- 英雄区域 -->
-    <section class="hero">
-        <div class="container">
-            <h1>分享知识与创意</h1>
-            <p>欢迎来到我的个人博客，这里分享技术文章、生活感悟和创意想法</p>
-            <a href="#" class="btn">查看最新文章</a>
-        </div>
-    </section>
-    
-    <!-- 博客内容区域 -->
-    <section class="blog-section">
-        <div class="container">
-            <h2 class="section-title">最新文章</h2>
-            
-            <div class="blog-grid">
-                <!-- 博客卡片1 -->
-                <div class="blog-card">
-                    <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="博客图片">
-                    </div>
-                    <div class="card-content">
-                        <h3>Web开发中的CSS动画技巧</h3>
-                        <p>探索现代CSS动画技术，为您的网站添加流畅而引人注目的视觉效果...</p>
-                        <a href="#" class="read-more">阅读更多</a>
-                    </div>
-                </div>
-                
-                <!-- 博客卡片2 -->
-                <div class="blog-card">
-                    <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="博客图片">
-                    </div>
-                    <div class="card-content">
-                        <h3>JavaScript ES2022新特性解析</h3>
-                        <p>深入了解最新JavaScript特性，以及如何在实际项目中应用它们...</p>
-                        <a href="#" class="read-more">阅读更多</a>
-                    </div>
-                </div>
-                
-                <!-- 博客卡片3 -->
-                <div class="blog-card">
-                    <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="博客图片">
-                    </div>
-                    <div class="card-content">
-                        <h3>响应式设计的最佳实践</h3>
-                        <p>创建在各种设备上都能完美显示的网站，提升用户体验和访问量...</p>
-                        <a href="#" class="read-more">阅读更多</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- 页脚 -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <h3>感谢访问我的博客</h3>
-                <p>如果您喜欢我的内容，请通过以下方式关注我</p>
-                
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-github"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                
-                <p class="copyright">&copy; 2023 我的个人博客. 保留所有权利</p>
-            </div>
-        </div>
-    </footer>
-    
+  </head>
+  <body>
+    <pointer-particles></pointer-particles>
+
     <script>
-        // 汉堡菜单功能
-        const hamburger = document.getElementById('hamburger');
-        const closeMenu = document.getElementById('close-menu');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const overlay = document.getElementById('overlay');
-        
-        hamburger.addEventListener('click', () => {
-            mobileMenu.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-        
-        closeMenu.addEventListener('click', closeMobileMenu);
-        overlay.addEventListener('click', closeMobileMenu);
-        
-        function closeMobileMenu() {
-            mobileMenu.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
+      class PointerParticle {
+        constructor(spread, speed, component) {
+          const { ctx, pointer, hue } = component;
+
+          this.ctx = ctx;
+          this.x = pointer.x;
+          this.y = pointer.y;
+          this.mx = pointer.mx * 0.1;
+          this.my = pointer.my * 0.1;
+          this.size = Math.random() + 1;
+          this.decay = 0.01;
+          this.speed = speed * 0.08;
+          this.spread = spread * this.speed;
+          this.spreadX = (Math.random() - 0.5) * this.spread - this.mx;
+          this.spreadY = (Math.random() - 0.5) * this.spread - this.my;
+          this.color = `hsl(${hue}deg 90% 60%)`;
         }
-        
-        // 滚动动画效果
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.9)';
-                header.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.1)';
+
+        draw() {
+          this.ctx.fillStyle = this.color;
+          this.ctx.beginPath();
+          this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          this.ctx.fill();
+        }
+
+        collapse() {
+          this.size -= this.decay;
+        }
+
+        trail() {
+          this.x += this.spreadX * this.size;
+          this.y += this.spreadY * this.size;
+        }
+
+        update() {
+          this.draw();
+          this.trail();
+          this.collapse();
+        }
+      }
+
+      class PointerParticles extends HTMLElement {
+        static register(tag = 'pointer-particles') {
+          if ('customElements' in window) {
+            customElements.define(tag, this);
+          }
+        }
+
+        static css = `
+    :host {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  `;
+
+        constructor() {
+          super();
+
+          this.canvas;
+          this.ctx;
+          this.fps = 60;
+          this.msPerFrame = 1000 / this.fps;
+          this.timePrevious;
+          this.particles = [];
+          this.pointer = {
+            x: 0,
+            y: 0,
+            mx: 0,
+            my: 0,
+          };
+          this.hue = 0;
+        }
+
+        connectedCallback() {
+          const canvas = document.createElement('canvas');
+          const sheet = new CSSStyleSheet();
+
+          this.shadowroot = this.attachShadow({ mode: 'open' });
+
+          sheet.replaceSync(PointerParticles.css);
+          this.shadowroot.adoptedStyleSheets = [sheet];
+
+          this.shadowroot.append(canvas);
+
+          this.canvas = this.shadowroot.querySelector('canvas');
+          this.ctx = this.canvas.getContext('2d');
+          this.setCanvasDimensions();
+          this.setupEvents();
+          this.timePrevious = performance.now();
+          this.animateParticles();
+        }
+
+        createParticles(event, { count, speed, spread }) {
+          this.setPointerValues(event);
+
+          for (let i = 0; i < count; i++) {
+            this.particles.push(new PointerParticle(spread, speed, this));
+          }
+        }
+
+        setPointerValues(event) {
+          this.pointer.x = event.x - this.offsetLeft;
+          this.pointer.y = event.y - this.offsetTop;
+          this.pointer.mx = event.movementX;
+          this.pointer.my = event.movementY;
+        }
+
+        setupEvents() {
+          const parent = this.parentNode;
+
+          parent.addEventListener('click', (event) => {
+            this.createParticles(event, {
+              count: 300,
+              speed: Math.random() + 1,
+              spread: Math.random() + 50,
+            });
+          });
+
+          parent.addEventListener('pointermove', (event) => {
+            this.createParticles(event, {
+              count: 20,
+              speed: this.getPointerVelocity(event),
+              spread: 1,
+            });
+          });
+
+          window.addEventListener('resize', () => this.setCanvasDimensions());
+        }
+
+        getPointerVelocity(event) {
+          const a = event.movementX;
+          const b = event.movementY;
+          const c = Math.floor(Math.sqrt(a * a + b * b));
+
+          return c;
+        }
+
+        handleParticles() {
+          for (let i = 0; i < this.particles.length; i++) {
+            this.particles[i].update();
+
+            if (this.particles[i].size <= 0.1) {
+              this.particles.splice(i, 1);
+              i--;
             }
-        });
+          }
+        }
+
+        setCanvasDimensions() {
+          const rect = this.parentNode.getBoundingClientRect();
+
+          this.canvas.width = rect.width;
+          this.canvas.height = rect.height;
+        }
+
+        animateParticles() {
+          requestAnimationFrame(() => this.animateParticles());
+
+          const timeNow = performance.now();
+          const timePassed = timeNow - this.timePrevious;
+
+          if (timePassed < this.msPerFrame) return;
+
+          const excessTime = timePassed % this.msPerFrame;
+
+          this.timePrevious = timeNow - excessTime;
+
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          this.hue = this.hue > 360 ? 0 : (this.hue += 3);
+
+          this.handleParticles();
+        }
+      }
+
+      PointerParticles.register();
     </script>
-</body>
+  </body>
 </html>
